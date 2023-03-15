@@ -26,8 +26,6 @@ class MentionInput extends StatefulWidget {
   String? placeHolder;
   bool? autoFocus;
   bool clearTextAfterSent;
-
-  // Additional UI properties
   double leftInputMargin;
   double rightInputMargin;
   List<Widget>? leftWidgets;
