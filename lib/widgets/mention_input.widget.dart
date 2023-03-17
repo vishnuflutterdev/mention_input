@@ -16,11 +16,18 @@ class MentionInput extends StatefulWidget {
   EdgeInsetsGeometry? suggestionContainerMargin;
   Decoration? suggestionContainerDecoration;
   SuggestionAlignment suggestionAlignment;
-  double? suggestionContainerBorderRadius;
+  BorderRadius? suggestionContainerBorderRadius;
 
   // Properties for Suggestion Item
   double itemHeight;
-  bool? dividerBetweenItem;
+  bool? dividerBetweenItems;
+  Widget Function(int index, MentionData data)? itemBuilder;
+
+  // Properties for Text Field Container
+  EdgeInsetsGeometry? textFieldContainerPadding;
+  Color? textFieldContainerColor;
+  BorderRadius? textFieldContainerBorderRadius;
+  Decoration? textFieldContainerDecoration;
 
   // Properties for Text Field
   String? placeHolder;
@@ -30,6 +37,9 @@ class MentionInput extends StatefulWidget {
   double rightInputMargin;
   List<Widget>? leftWidgets;
   List<Widget>? rightWidgets;
+  bool shouldHideLeftWidgets;
+  bool shouldHideRightWidgets;
+  Function(String value)? onChanged;
 
   // Data properties
   List<Mention> mentions;
@@ -40,28 +50,38 @@ class MentionInput extends StatefulWidget {
   // Send Button
   Function? onSend;
   bool hasSendButton;
+  Widget? sendIcon;
 
-  MentionInput({
-    super.key,
-    required this.mentions,
-    this.controller,
-    this.suggestionContainerColor,
-    this.suggestionContainerPadding,
-    this.suggestionContainerMargin,
-    this.suggestionContainerDecoration,
-    this.suggestionAlignment = SuggestionAlignment.top,
-    this.placeHolder,
-    this.autoFocus,
-    this.clearTextAfterSent = true,
-    this.leftWidgets,
-    this.rightWidgets,
-    this.leftInputMargin = 8,
-    this.rightInputMargin = 8,
-    this.itemHeight = DEFAULT_ITEM_HEIGHT,
-    this.dividerBetweenItem = true,
-    this.onSend,
-    this.hasSendButton = true,
-  });
+  MentionInput(
+      {super.key,
+      required this.mentions,
+      this.controller,
+      this.suggestionContainerColor,
+      this.suggestionContainerPadding,
+      this.suggestionContainerMargin,
+      this.suggestionContainerDecoration,
+      this.suggestionContainerBorderRadius,
+      this.suggestionAlignment = SuggestionAlignment.top,
+      this.placeHolder,
+      this.autoFocus,
+      this.clearTextAfterSent = true,
+      this.leftWidgets,
+      this.rightWidgets,
+      this.leftInputMargin = 8,
+      this.rightInputMargin = 8,
+      this.itemHeight = DEFAULT_ITEM_HEIGHT,
+      this.dividerBetweenItems = true,
+      this.onSend,
+      this.hasSendButton = true,
+      this.textFieldContainerBorderRadius,
+      this.textFieldContainerColor,
+      this.textFieldContainerDecoration,
+      this.textFieldContainerPadding,
+      this.sendIcon,
+      this.itemBuilder,
+      this.shouldHideLeftWidgets = false,
+      this.shouldHideRightWidgets = false,
+      this.onChanged});
 
   @override
   State<MentionInput> createState() => _MentionInputState();
@@ -75,6 +95,7 @@ class _MentionInputState extends State<MentionInput> {
   late FocusNode focusNode;
   AllMentionWords allMentionWords = {};
   late String allTriggerAnnotations;
+  bool shouldShowSendButton = false;
 
   void updateAllMentionWords() {
     for (var mention in widget.mentions) {
@@ -102,6 +123,18 @@ class _MentionInputState extends State<MentionInput> {
   }
 
   void _suggestionListener() {
+    if (_controller.text.isNotEmpty) {
+      setState(() {
+        shouldShowSendButton = true;
+      });
+    } else {
+      setState(() {
+        shouldShowSendButton = false;
+      });
+    }
+
+    widget.onChanged?.call(_controller.text);
+
     final cursorPos = _controller.selection.baseOffset;
     final fullText = _controller.text;
 
@@ -226,9 +259,6 @@ class _MentionInputState extends State<MentionInput> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isKeyboardVisible =
-        KeyboardVisibilityProvider.isKeyboardVisible(context);
-
     return PortalTarget(
       visible: isSuggestionsVisible,
       anchor: Aligned(
@@ -239,111 +269,38 @@ class _MentionInputState extends State<MentionInput> {
               ? Alignment.bottomCenter
               : Alignment.topCenter,
           widthFactor: 1),
-      portalFollower: Container(
-        constraints: BoxConstraints(
-            minHeight: widget.itemHeight, maxHeight: widget.itemHeight * 4),
-        height: widget.itemHeight * (suggestionList.length + 1),
-        margin: widget.suggestionContainerMargin ??
-            const EdgeInsets.symmetric(vertical: 16),
-        padding: widget.suggestionContainerPadding ?? const EdgeInsets.all(16),
-        decoration: widget.suggestionContainerDecoration ??
-            BoxDecoration(
-                borderRadius: BorderRadius.circular(
-                    widget.suggestionContainerBorderRadius ?? 12),
-                color: widget.suggestionContainerColor ?? Colors.amber),
-        child: Scrollbar(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              ...suggestionList.asMap().entries.map((entry) {
-                var index = entry.key;
-                var mention = entry.value;
-
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () => addMention(mention.display),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: widget.itemHeight,
-                        child: Row(
-                          children: [
-                            if (mention.imageUrl != null)
-                              CircleAvatar(
-                                backgroundImage:
-                                    NetworkImage(mention.imageUrl!),
-                              ),
-                            const SizedBox(width: 12),
-                            Text(
-                              mention.display,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    index != suggestionList.length - 1 &&
-                            widget.dividerBetweenItem!
-                        ? const Divider()
-                        : const SizedBox(),
-                  ],
-                );
-              })
-            ],
-          ),
-        ),
+      portalFollower: SuggestionSection(
+        itemHeight: widget.itemHeight,
+        addMention: addMention,
+        suggestionList: suggestionList,
+        itemBuilder: widget.itemBuilder,
+        padding: widget.suggestionContainerPadding,
+        margin: widget.suggestionContainerMargin,
+        borderRadius: widget.suggestionContainerBorderRadius,
+        color: widget.suggestionContainerColor,
+        decoration: widget.suggestionContainerDecoration,
+        dividerBetweenItems: widget.dividerBetweenItems,
       ),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.greenAccent,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              children: [
-                ...?widget.leftWidgets,
-                SizedBox(
-                  width:
-                      widget.leftWidgets != null ? widget.leftInputMargin : 0,
-                ),
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    focusNode: focusNode,
-                    onTapOutside: (event) =>
-                        FocusManager.instance.primaryFocus?.unfocus(),
-                    autofocus: widget.autoFocus ?? false,
-                    decoration: InputDecoration(
-                        hintText: widget.placeHolder ?? "Input your text",
-                        border: InputBorder.none),
-                  ),
-                ),
-                SizedBox(
-                  width:
-                      widget.rightWidgets != null ? widget.rightInputMargin : 0,
-                ),
-                ...?widget.rightWidgets,
-                isKeyboardVisible && widget.hasSendButton
-                    ? const SizedBox(width: 8)
-                    : const SizedBox(),
-                isKeyboardVisible && widget.hasSendButton
-                    ? IconButton(
-                        icon: const Icon(Icons.send),
-                        onPressed: () {
-                          widget.onSend?.call();
-                          if (widget.clearTextAfterSent) _controller.clear();
-                        },
-                      )
-                    : const SizedBox(),
-              ],
-            ),
-          ],
-        ),
+      child: InputSection(
+        controller: _controller,
+        focusNode: focusNode,
+        hasSendButton: widget.hasSendButton,
+        shouldShowSendButton: shouldShowSendButton,
+        leftInputMargin: widget.leftInputMargin,
+        rightInputMargin: widget.rightInputMargin,
+        leftWidgets: widget.leftWidgets,
+        rightWidgets: widget.rightWidgets,
+        autoFocus: widget.autoFocus,
+        clearTextAfterSent: widget.clearTextAfterSent,
+        onSend: widget.onSend,
+        placeHolder: widget.placeHolder,
+        padding: widget.textFieldContainerPadding,
+        borderRadius: widget.textFieldContainerBorderRadius,
+        color: widget.textFieldContainerColor,
+        decoration: widget.textFieldContainerDecoration,
+        sendIcon: widget.sendIcon,
+        shouldHideLeftWidgets: widget.shouldHideLeftWidgets,
+        shouldHideRightWidgets: widget.shouldHideRightWidgets,
       ),
     );
   }
