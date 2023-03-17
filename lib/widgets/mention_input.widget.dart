@@ -40,6 +40,16 @@ class MentionInput extends StatefulWidget {
   bool shouldHideLeftWidgets;
   bool shouldHideRightWidgets;
   Function(String value)? onChanged;
+  Color? cursorColor;
+  TextInputType? keyboardType;
+  int? minLines;
+  int? maxLines;
+  int? maxLength;
+  TextStyle? style;
+  TextAlign? textAlign;
+  TextAlignVertical? textAlignVertical;
+  TextCapitalization? textCapitalization;
+  TextDirection? textDirection;
 
   // Data properties
   List<Mention> mentions;
@@ -81,7 +91,17 @@ class MentionInput extends StatefulWidget {
       this.itemBuilder,
       this.shouldHideLeftWidgets = false,
       this.shouldHideRightWidgets = false,
-      this.onChanged});
+      this.onChanged,
+      this.cursorColor,
+      this.keyboardType,
+      this.minLines,
+      this.maxLines,
+      this.maxLength,
+      this.style,
+      this.textAlign,
+      this.textAlignVertical,
+      this.textCapitalization,
+      this.textDirection});
 
   @override
   State<MentionInput> createState() => _MentionInputState();
@@ -301,6 +321,17 @@ class _MentionInputState extends State<MentionInput> {
         sendIcon: widget.sendIcon,
         shouldHideLeftWidgets: widget.shouldHideLeftWidgets,
         shouldHideRightWidgets: widget.shouldHideRightWidgets,
+        cursorColor: widget.cursorColor,
+        keyboardType: widget.keyboardType,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
+        maxLength: widget.maxLength,
+        style: widget.style,
+        textAlign: widget.textAlign ?? TextAlign.start,
+        textAlignVertical: widget.textAlignVertical,
+        textCapitalization:
+            widget.textCapitalization ?? TextCapitalization.none,
+        textDirection: widget.textDirection,
       ),
     );
   }

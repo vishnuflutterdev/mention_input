@@ -79,7 +79,16 @@ For example:
 | shouldHideLeftWidgets | Should hide left widgets | bool | false | |
 | shouldHideRightWidgets | Should hide right widgets | bool | false | |
 | onChanged | onChange handler of text field | Function(String value) | |
-
+| cursorColor | Cursor Color | Color | | |
+| keyboardType | Keyboard Type | TextInputType | | |
+| minLines | Min number of lines | int | | |
+| maxLines | Max number of lines | int | | |
+| maxLength | Max number of characters | int | | |
+| style | Style of Text Field | TextStyle | | |
+| textAlign | Text Align | TextAlign | | |
+| textAlignVertical | Text align vertical | TextAlignVertical | |
+| textCapitalization | Text capitalization | TextCapitalization | |
+| textDirection | Text direction | TextDirection | |
 ### Text Field Container Properties
 
 | Property | Description | Data Type | Default Value | Required? |

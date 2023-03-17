@@ -65,6 +65,11 @@ class _MyAppState extends State<MyApp> {
                     MentionInput(
                       // shouldHideRightWidgets: false,
                       rightWidgets: const [
+                        VerticalDivider(
+                          thickness: 2,
+                          indent: 8,
+                          endIndent: 8,
+                        ),
                         Icon(Icons.access_alarm),
                         SizedBox(
                           width: 12,
@@ -77,10 +82,15 @@ class _MyAppState extends State<MyApp> {
                         key: ValueKey(data.id),
                         child: Text(
                           data.display,
-                          style: TextStyle(color: Colors.brown),
+                          style: const TextStyle(color: Colors.brown),
                         ),
                       ),
-                      sendIcon: const Icon(Icons.share_location),
+                      sendIcon: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                              color: Colors.greenAccent,
+                              shape: BoxShape.circle),
+                          child: const Icon(Icons.share_location)),
                       controller: controller,
                       mentions: [
                         Mention(

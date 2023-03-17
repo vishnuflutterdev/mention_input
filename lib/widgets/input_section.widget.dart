@@ -22,29 +22,48 @@ class InputSection extends StatelessWidget {
   final Widget? sendIcon;
   final bool shouldHideRightWidgets;
   final bool shouldHideLeftWidgets;
+  final int? minLines;
+  final int? maxLines;
+  final int? maxLength;
+  final Color? cursorColor;
+  final TextInputType? keyboardType;
+  final TextStyle? style;
+  final TextAlign textAlign;
+  final TextAlignVertical? textAlignVertical;
+  final TextCapitalization textCapitalization;
+  final TextDirection? textDirection;
 
-  const InputSection({
-    super.key,
-    required this.leftInputMargin,
-    required this.rightInputMargin,
-    required this.hasSendButton,
-    required this.shouldShowSendButton,
-    required this.focusNode,
-    required this.controller,
-    required this.shouldHideLeftWidgets,
-    required this.shouldHideRightWidgets,
-    this.leftWidgets,
-    this.rightWidgets,
-    this.onSend,
-    this.clearTextAfterSent = true,
-    this.placeHolder,
-    this.autoFocus,
-    this.padding,
-    this.color,
-    this.borderRadius,
-    this.decoration,
-    this.sendIcon,
-  });
+  const InputSection(
+      {super.key,
+      required this.leftInputMargin,
+      required this.rightInputMargin,
+      required this.hasSendButton,
+      required this.shouldShowSendButton,
+      required this.focusNode,
+      required this.controller,
+      required this.shouldHideLeftWidgets,
+      required this.shouldHideRightWidgets,
+      this.leftWidgets,
+      this.rightWidgets,
+      this.onSend,
+      this.clearTextAfterSent = true,
+      this.placeHolder,
+      this.autoFocus,
+      this.padding,
+      this.color,
+      this.borderRadius,
+      this.decoration,
+      this.sendIcon,
+      this.cursorColor,
+      this.maxLength,
+      this.minLines,
+      this.maxLines,
+      this.keyboardType,
+      this.textCapitalization = TextCapitalization.none,
+      this.textAlign = TextAlign.start,
+      this.style,
+      this.textAlignVertical,
+      this.textDirection});
 
   @override
   Widget build(BuildContext context) {
@@ -58,38 +77,52 @@ class InputSection extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              if (!shouldHideLeftWidgets) ...?leftWidgets,
-              SizedBox(
-                width: leftWidgets != null ? leftInputMargin : 0,
-              ),
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  autofocus: autoFocus ?? false,
-                  decoration: InputDecoration(
-                      hintText: placeHolder ?? "Aa", border: InputBorder.none),
+          IntrinsicHeight(
+            child: Row(
+              children: [
+                if (!shouldHideLeftWidgets) ...?leftWidgets,
+                SizedBox(
+                  width: leftWidgets != null ? leftInputMargin : 0,
                 ),
-              ),
-              SizedBox(
-                width: rightWidgets != null ? rightInputMargin : 0,
-              ),
-              if (!shouldHideRightWidgets) ...?rightWidgets,
-              shouldShowSendButton && hasSendButton
-                  ? const SizedBox(width: 8)
-                  : const SizedBox(),
-              shouldShowSendButton && hasSendButton
-                  ? IconButton(
-                      icon: sendIcon ?? const Icon(Icons.send),
-                      onPressed: () {
-                        onSend?.call();
-                        if (clearTextAfterSent) controller.clear();
-                      },
-                    )
-                  : const SizedBox(),
-            ],
+                Expanded(
+                  child: TextField(
+                    minLines: minLines,
+                    maxLines: maxLines,
+                    maxLength: maxLength,
+                    keyboardType: keyboardType,
+                    style: style,
+                    textAlign: textAlign,
+                    textAlignVertical: textAlignVertical,
+                    textCapitalization: textCapitalization,
+                    textDirection: textDirection,
+                    cursorColor: cursorColor,
+                    controller: controller,
+                    focusNode: focusNode,
+                    autofocus: autoFocus ?? false,
+                    decoration: InputDecoration(
+                        hintText: placeHolder ?? "Aa",
+                        border: InputBorder.none),
+                  ),
+                ),
+                SizedBox(
+                  width: rightWidgets != null ? rightInputMargin : 0,
+                ),
+                if (!shouldHideRightWidgets) ...?rightWidgets,
+                shouldShowSendButton && hasSendButton
+                    ? const SizedBox(width: 8)
+                    : const SizedBox(),
+                shouldShowSendButton && hasSendButton
+                    ? IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: sendIcon ?? const Icon(Icons.send),
+                        onPressed: () {
+                          onSend?.call();
+                          if (clearTextAfterSent) controller.clear();
+                        },
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           ),
         ],
       ),
