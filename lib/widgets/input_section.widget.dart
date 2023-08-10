@@ -28,6 +28,7 @@ class InputSection extends StatelessWidget {
   final Color? cursorColor;
   final TextInputType? keyboardType;
   final TextStyle? style;
+  final TextStyle? hintStyle;
   final TextAlign textAlign;
   final TextAlignVertical? textAlignVertical;
   final TextCapitalization textCapitalization;
@@ -62,6 +63,7 @@ class InputSection extends StatelessWidget {
       this.textCapitalization = TextCapitalization.none,
       this.textAlign = TextAlign.start,
       this.style,
+      this.hintStyle,
       this.textAlignVertical,
       this.textDirection});
 
@@ -100,6 +102,7 @@ class InputSection extends StatelessWidget {
                     focusNode: focusNode,
                     autofocus: autoFocus ?? false,
                     decoration: InputDecoration(
+                        hintStyle: hintStyle,
                         hintText: placeHolder ?? "Aa",
                         border: InputBorder.none),
                   ),

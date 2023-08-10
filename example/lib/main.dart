@@ -64,6 +64,7 @@ class _MyAppState extends State<MyApp> {
                   children: [
                     MentionInput(
                       // shouldHideRightWidgets: false,
+                      hintStyle: const TextStyle(color: Colors.red),
                       rightWidgets: const [
                         VerticalDivider(
                           thickness: 2,

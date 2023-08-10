@@ -46,6 +46,7 @@ class MentionInput extends StatefulWidget {
   int? maxLines;
   int? maxLength;
   TextStyle? style;
+  TextStyle? hintStyle;
   TextAlign? textAlign;
   TextAlignVertical? textAlignVertical;
   TextCapitalization? textCapitalization;
@@ -98,6 +99,7 @@ class MentionInput extends StatefulWidget {
       this.maxLines,
       this.maxLength,
       this.style,
+      this.hintStyle,
       this.textAlign,
       this.textAlignVertical,
       this.textCapitalization,
@@ -335,6 +337,7 @@ class _MentionInputState extends State<MentionInput> {
         maxLines: widget.maxLines,
         maxLength: widget.maxLength,
         style: widget.style,
+        hintStyle: widget.hintStyle,
         textAlign: widget.textAlign ?? TextAlign.start,
         textAlignVertical: widget.textAlignVertical,
         textCapitalization:
