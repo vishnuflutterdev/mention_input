@@ -52,6 +52,9 @@ class MentionInput extends StatefulWidget {
   TextCapitalization? textCapitalization;
   TextDirection? textDirection;
 
+  /// for selected text
+  Function(String text)? onSelectedOption;
+
   // Data properties
   List<Mention> mentions;
 
@@ -103,7 +106,9 @@ class MentionInput extends StatefulWidget {
       this.textAlign,
       this.textAlignVertical,
       this.textCapitalization,
-      this.textDirection});
+      this.textDirection,
+      this.onSelectedOption
+      });
 
   @override
   State<MentionInput> createState() => _MentionInputState();
@@ -234,6 +239,8 @@ class _MentionInputState extends State<MentionInput> {
         selectionWord!.startIdx == 0 ? 1 : selectionWord!.startIdx + 2;
 
     final currentCursor = startIdx + replaceText.length + 1;
+
+    widget.onSelectedOption?.call(replaceText);
 
     _controller.selection =
         TextSelection.fromPosition(TextPosition(offset: currentCursor));
