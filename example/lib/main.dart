@@ -67,6 +67,9 @@ class _MyAppState extends State<MyApp> {
                       onSelectedOption: (text){
                         /// selected text
                       },
+                      shouldHideLeftWidgets: true,
+                      shouldHideRightWidgets: true,
+                      hasSendButton:false,
                       hintStyle: const TextStyle(color: Colors.red),
                       rightWidgets: const [
                         VerticalDivider(

@@ -33,6 +33,8 @@ class InputSection extends StatelessWidget {
   final TextAlignVertical? textAlignVertical;
   final TextCapitalization textCapitalization;
   final TextDirection? textDirection;
+  final double? textContainerHeight;
+  final double? textContainerWidth;
 
   const InputSection(
       {super.key,
@@ -65,12 +67,16 @@ class InputSection extends StatelessWidget {
       this.style,
       this.hintStyle,
       this.textAlignVertical,
-      this.textDirection});
+      this.textDirection,
+      this.textContainerHeight,
+      this.textContainerWidth
+      });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: padding ?? const EdgeInsets.all(16),
+      width: textContainerWidth,
       decoration: decoration ??
           BoxDecoration(
             borderRadius: borderRadius ?? BorderRadius.circular(16),
@@ -87,24 +93,27 @@ class InputSection extends StatelessWidget {
                   width: leftWidgets != null ? leftInputMargin : 0,
                 ),
                 Expanded(
-                  child: TextField(
-                    minLines: minLines,
-                    maxLines: maxLines,
-                    maxLength: maxLength,
-                    keyboardType: keyboardType,
-                    style: style,
-                    textAlign: textAlign,
-                    textAlignVertical: textAlignVertical,
-                    textCapitalization: textCapitalization,
-                    textDirection: textDirection,
-                    cursorColor: cursorColor,
-                    controller: controller,
-                    focusNode: focusNode,
-                    autofocus: autoFocus ?? false,
-                    decoration: InputDecoration(
-                        hintStyle: hintStyle,
-                        hintText: placeHolder ?? "Aa",
-                        border: InputBorder.none),
+                  child: SizedBox(
+                    height: textContainerHeight,
+                    child: TextField(
+                      minLines: minLines,
+                      maxLines: maxLines,
+                      maxLength: maxLength,
+                      keyboardType: keyboardType,
+                      style: style,
+                      textAlign: textAlign,
+                      textAlignVertical: textAlignVertical,
+                      textCapitalization: textCapitalization,
+                      textDirection: textDirection,
+                      cursorColor: cursorColor,
+                      controller: controller,
+                      focusNode: focusNode,
+                      autofocus: autoFocus ?? false,
+                      decoration: InputDecoration(
+                          hintStyle: hintStyle,
+                          hintText: placeHolder ?? "Aa",
+                          border: InputBorder.none),
+                    ),
                   ),
                 ),
                 SizedBox(

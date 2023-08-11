@@ -51,6 +51,8 @@ class MentionInput extends StatefulWidget {
   TextAlignVertical? textAlignVertical;
   TextCapitalization? textCapitalization;
   TextDirection? textDirection;
+  double? textContainerHeight;
+  double? textContainerWidth;
 
   /// for selected text
   Function(String text)? onSelectedOption;
@@ -107,7 +109,9 @@ class MentionInput extends StatefulWidget {
       this.textAlignVertical,
       this.textCapitalization,
       this.textDirection,
-      this.onSelectedOption
+      this.onSelectedOption,
+      this.textContainerHeight,
+      this.textContainerWidth
       });
 
   @override
@@ -350,6 +354,8 @@ class _MentionInputState extends State<MentionInput> {
         textCapitalization:
             widget.textCapitalization ?? TextCapitalization.none,
         textDirection: widget.textDirection,
+        textContainerHeight: widget.textContainerHeight,
+        textContainerWidth: widget.textContainerWidth,
       ),
     );
   }
