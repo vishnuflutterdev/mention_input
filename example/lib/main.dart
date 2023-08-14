@@ -47,7 +47,11 @@ class _MyAppState extends State<MyApp> {
       isData1 = !isData1;
     });
 
-    controller.clearText();
+    if(controller.clearText!=null)
+      {
+        controller.clearText!();
+      }
+
   }
 
   @override
@@ -62,58 +66,58 @@ class _MyAppState extends State<MyApp> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    MentionInput(
-                      // shouldHideRightWidgets: false,
-                      onSelectedOption: (text){
-                        /// selected text
-                      },
-                      shouldHideLeftWidgets: true,
-                      shouldHideRightWidgets: true,
-                      hasSendButton:false,
-                      hintStyle: const TextStyle(color: Colors.red),
-                      rightWidgets: const [
-                        VerticalDivider(
-                          thickness: 2,
-                          indent: 8,
-                          endIndent: 8,
-                        ),
-                        Icon(Icons.access_alarm),
-                        SizedBox(
-                          width: 12,
-                        )
-                      ],
-                      itemBuilder: (index, data) => Container(
-                        height: 60,
-                        color: Colors.cyanAccent,
-                        width: double.infinity,
-                        key: ValueKey(data.id),
-                        child: Text(
-                          data.display,
-                          style: const TextStyle(color: Colors.brown),
-                        ),
-                      ),
-                      sendIcon: Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                              color: Colors.greenAccent,
-                              shape: BoxShape.circle),
-                          child: const Icon(Icons.share_location)),
-                      controller: controller,
-                      mentions: [
-                        Mention(
-                            triggerAnnotation: "@",
-                            highlightStyle: const TextStyle(
-                                color: Colors.red, fontWeight: FontWeight.w600),
-                            data: [...mentionData])
-                      ],
-                      textFieldContainerPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
-                      textFieldContainerColor: Colors.amberAccent,
-                      textFieldContainerBorderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12)),
-                      suggestionContainerColor: Colors.blueAccent,
-                    ),
+                    // MentionInput(
+                    //   // shouldHideRightWidgets: false,
+                    //   onSelectedOption: (text){
+                    //     /// selected text
+                    //   },
+                    //   shouldHideLeftWidgets: true,
+                    //   shouldHideRightWidgets: true,
+                    //   hasSendButton:false,
+                    //   hintStyle: const TextStyle(color: Colors.red),
+                    //   rightWidgets: const [
+                    //     VerticalDivider(
+                    //       thickness: 2,
+                    //       indent: 8,
+                    //       endIndent: 8,
+                    //     ),
+                    //     Icon(Icons.access_alarm),
+                    //     SizedBox(
+                    //       width: 12,
+                    //     )
+                    //   ],
+                    //   itemBuilder: (index, data) => Container(
+                    //     height: 60,
+                    //     color: Colors.cyanAccent,
+                    //     width: double.infinity,
+                    //     key: ValueKey(data.id),
+                    //     child: Text(
+                    //       data.display,
+                    //       style: const TextStyle(color: Colors.brown),
+                    //     ),
+                    //   ),
+                    //   sendIcon: Container(
+                    //       padding: const EdgeInsets.all(8),
+                    //       decoration: const BoxDecoration(
+                    //           color: Colors.greenAccent,
+                    //           shape: BoxShape.circle),
+                    //       child: const Icon(Icons.share_location)),
+                    //   //controller: controller,
+                    //   mentions: [
+                    //     Mention(
+                    //         triggerAnnotation: "@",
+                    //         highlightStyle: const TextStyle(
+                    //             color: Colors.red, fontWeight: FontWeight.w600),
+                    //         data: [...mentionData])
+                    //   ],
+                    //   textFieldContainerPadding: const EdgeInsets.symmetric(
+                    //       horizontal: 16, vertical: 8),
+                    //   textFieldContainerColor: Colors.amberAccent,
+                    //   textFieldContainerBorderRadius: const BorderRadius.only(
+                    //       topLeft: Radius.circular(12),
+                    //       topRight: Radius.circular(12)),
+                    //   suggestionContainerColor: Colors.blueAccent,
+                    // ),
                     ElevatedButton(
                         onPressed: changeDataSet,
                         child: const Text("Change data"))

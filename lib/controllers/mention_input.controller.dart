@@ -1,6 +1,6 @@
 typedef GetTextMethod = String Function();
 
 class MentionInputController {
-  late Function clearText;
+   Function? clearText;
   late GetTextMethod getText;
 }
